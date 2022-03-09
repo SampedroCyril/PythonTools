@@ -2,7 +2,7 @@ from itertools import count
 from bs4 import BeautifulSoup
 import requests
 
-vgm_url = 'https://thierryorru.com'
+vgm_url = 'https://www.google.com'
 html_text = requests.get(vgm_url).text
 soup = BeautifulSoup(html_text, 'html.parser')
   

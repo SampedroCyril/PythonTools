@@ -1,4 +1,3 @@
-from itertools import count
 from bs4 import BeautifulSoup
 import requests
 import csv
@@ -16,8 +15,6 @@ filename = filename.replace('/', '\\')
 openedfile = open(filename, encoding='utf-8')
 file = csv.reader(openedfile)
 
-# urls = []
-# i[0] => url
 for url in file:
     
     # vgm_url = url
