@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
-import requests
-import csv
+import requests, csv
 from tkinter import filedialog
 from tkinter import *
 
@@ -15,11 +14,17 @@ filename = filename.replace('/', '\\')
 openedfile = open(filename, encoding='utf-8')
 file = csv.reader(openedfile)
 
+urlok = []
+urlko = []
 for url in file:
+    # 20x & 30x donc 200 <= x > 400
+    httpsurl = "https://" + url[0]
+    resp = requests.get(httpsurl.replace('\u200b', '')).text
+    soup = BeautifulSoup(resp, 'html.parser')
     
-    # vgm_url = url
-    # html_text = requests.get(vgm_url).text
-    # soup = BeautifulSoup(html_text, 'html.parser')
-    print(url[0])
-    # if '<p>' in soup:
-    #     print()
+    if resp: 
+        if 'Wordpress' in soup.find('body').text or 'Lorem ipsum' in soup.find('body').text or 'Prestashop' in soup.find('body').text or 'Mug The best is yet to come' in soup.find('body').text:
+            urlko.append(resp.status_code)
+        else: urlok.append(resp.status_code)
+        
+    else: print(resp.status_code)
