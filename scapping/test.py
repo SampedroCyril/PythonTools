@@ -1,32 +1,35 @@
-from os import path
 from bs4 import BeautifulSoup
-import urllib3, csv
+import requests, csv
 from tkinter import filedialog
 from tkinter import *
-import urllib3
 
-# window = Tk()
-# window.geometry("100x100")
-# filename = filedialog.askopenfilename(initialdir="/",
-#                                       title = "",
-#                                       filetypes=())
+window = Tk()
+window.geometry("100x100")
+filename = filedialog.askopenfilename(initialdir="/",
+                                      title = "",
+                                      filetypes=())
 
-# filename = filename.replace('/', '\\')
+filename = filename.replace('/', '\\')
 
-# openedfile = open(filename, encoding='utf-8')
-# file = csv.reader(openedfile)
-# urls = []
-# for url in file:
-    # httpsurl = "https://" + url[0]
-#     # htmltext = requests.get(httpsurl).text
-#     # soup = BeautifulSoup(htmltext, 'html.parser')
-    # uri = 'https://' + str(url[0])
-    # if '.fr' in uri or '.com' in uri:
-    # print(url[0])
-# for i in range(len(urls)):
-    # http = urllib3.PoolManager()
-    # r = http.request('GET', uri)
-    # soup = BeautifulSoup(r, 'html.parser')
-    # print(soup)
+openedfile = open(filename, encoding='utf-8')
+file = csv.reader(openedfile)
+writedfile = open('urls.csv', 'w', newline='')
+finalfile = csv.writer(writedfile)
+
+for url in file:
     
-# print(len(urls)//5)
+    try :
+        httpsurl = "https://" + url[0]
+        # resp = requests.get(httpsurl.replace('\u200b', ''), allow_redirects=True).text
+        httpcode = requests.get(httpsurl.replace('\u200b', ''), allow_redirects=True)
+        if httpcode.status_code >= 200 or httpcode.status_code < 400:
+                finalfile.writerow(['url OK', httpsurl])
+        else: finalfile.writerow(['url KO', httpsurl])
+            
+    except :
+        httpsurl = "https://www." + url[0]
+        # resp = requests.get(httpsurl.replace('\u200b', ''), allow_redirects=True).text
+        httpcode = requests.get(httpsurl.replace('\u200b', ''), allow_redirects=True)
+        if httpcode.status_code >= 200 or httpcode.status_code < 400:
+                finalfile.writerow(['url OK', httpsurl])
+        else: finalfile.writerow(['url KO', httpsurl])
